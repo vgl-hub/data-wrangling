@@ -291,6 +291,7 @@ def get_genome_metadata(species, tolid, biosample_accession):
                     '5mC': 1,
                     'hifi_bam': 1
                 }
+                metadata_tags = []
                 for filepath in filepaths:
                     extension = filepath.split('.', 1)[1]
                     metadata_tag = filepath.split('.', 1)[0]
@@ -308,8 +309,10 @@ def get_genome_metadata(species, tolid, biosample_accession):
                             filetype = filetype[0]
                     if filetype:
                         metadata = metadata_dict[filetype]
+                        if metadata_tag not in metadata_tags:
+                            metadata_tags.append(metadata_tag)
                         file_metadata[filepath] = {'biosample_accession': biosample_accession, 
-                                        'library_ID': f'%s_%s_%i' % (tolid, metadata['library'], filetype_counts[filetype]), 
+                                        'library_ID': f'%s_%s_%i' % (tolid, metadata['library'], metadata_tags.index(metadata_tag) + 1), 
                                         'title': f'%s %s' % (species, metadata['title']), 
                                         'library_strategy': metadata['library_strategy'], 
                                         'library_source': metadata['library_source'], 
@@ -393,14 +396,15 @@ def get_transcriptome_metadata(species, tolid, biosample_accession):
     return file_metadata
 
 def write_file_metadata(file_metadata, filename):
-    os.makedirs(os.path.dirname(filename), exist_ok=True)
-    print(f'Metadata saved to %s' % (filename))
-    with open(filename, mode = 'w') as out:
-        fieldnames = ['biosample_accession', 'library_ID', 'title', 'library_strategy', 'library_source', 'library_selection',
-                'library_layout', 'platform', 'instrument_model', 'design_description', 'filetype', 'filename', 'filename2',
-                'filename3', 'filename4', 'assembly', 'fasta_file']
-        writer = csv.DictWriter(out, delimiter ='\t', fieldnames = fieldnames)
-        writer.writeheader()
-        for key in file_metadata.keys():
-            line = file_metadata[key]
-            writer.writerow(line)
+    if file_metadata:
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
+        print(f'Metadata saved to %s' % (filename))
+        with open(filename, mode = 'w') as out:
+            fieldnames = ['biosample_accession', 'library_ID', 'title', 'library_strategy', 'library_source', 'library_selection',
+                    'library_layout', 'platform', 'instrument_model', 'design_description', 'filetype', 'filename', 'filename2',
+                    'filename3', 'filename4', 'assembly', 'fasta_file']
+            writer = csv.DictWriter(out, delimiter ='\t', fieldnames = fieldnames)
+            writer.writeheader()
+            for key in file_metadata.keys():
+                line = file_metadata[key]
+                writer.writerow(line)
