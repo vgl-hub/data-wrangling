@@ -186,6 +186,18 @@ metadata_dict = {
         'design_description':'ISO-seq data generated with PacBio SMRTbell prep kit 3.0',
         'filetype':'bam'
     },    
+    'Kinnex': {
+        'library':'kinnex',
+        'title':'Iso-Seq FLNC',
+        'library_strategy':'OTHER',
+        'library_source':'OTHER',
+        'library_selection':'cDNA_oligo_dT',
+        'library_layout':'single',
+        'platform':'PACBIO_SMRT',
+        'instrument_model':'Revio',
+        'design_description':'Kinnex data generated with PacBio SMRTbell prep kit 3.0',
+        'filetype':'bam'
+    },    
 }
 
 s3 = boto3.client('s3')
@@ -369,12 +381,15 @@ def get_transcriptome_metadata(species, tolid, biosample_accession):
                                             'assembly':'',
                                             'fasta_file':'',
                                             }
-                elif platform == 'pacbio_hifi':
+                elif platform in ['pacbio_hifi', 'pacbio_kinnex']:
                     for filepath in filepaths:
                         file = filepath.split('/')[-1]
                         extension = file.split(os.extsep, 1)[-1]
                         if extension == 'bam':
-                            metadata = metadata_dict['Iso-Seq']
+                            if platform == 'pacbio_hifi':
+                                metadata = metadata_dict['Iso-Seq']
+                            elif platform == 'pacbio_kinnex':
+                                metadata = metadata_dict['Kinnex']
                             file_metadata[file] = {'biosample_accession': biosample_accession, 
                                                 'library_ID': f'%s_%s' % (tolid, metadata['library']), 
                                                 'title': f'%s %s %s' % (species, tissue.capitalize(), metadata['title']), 
