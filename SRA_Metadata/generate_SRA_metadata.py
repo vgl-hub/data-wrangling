@@ -391,7 +391,7 @@ def get_transcriptome_metadata(species, tolid, biosample_accession):
                             elif platform == 'pacbio_kinnex':
                                 metadata = metadata_dict['Kinnex']
                             file_metadata[file] = {'biosample_accession': biosample_accession, 
-                                                'library_ID': f'%s_%s' % (tolid, metadata['library']), 
+                                                'library_ID': f'%s_%s_%s' % (tolid, metadata['library'], tissue), 
                                                 'title': f'%s %s %s' % (species, tissue.capitalize(), metadata['title']), 
                                                 'library_strategy': metadata['library_strategy'], 
                                                 'library_source': metadata['library_source'], 
