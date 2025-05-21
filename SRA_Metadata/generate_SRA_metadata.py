@@ -207,7 +207,8 @@ pacbio_instruments = {'m54306Ue':'Sequel II',
                    'm64330e':'Sequel II',
                    'm64334e':'Sequel II',
                    'm64055e':'Sequel II',
-                   'm84091':'Revio'}
+                   'm84091':'Revio',
+                   'm84203':'Revio'}
 
 re_extensions = [re.compile('.*.fastq.gz$'), re.compile('.*.bam$')]
 
