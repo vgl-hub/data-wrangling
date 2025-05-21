@@ -313,7 +313,7 @@ def get_genome_metadata(species, tolid, biosample_accession):
                     else:
                         instrument = 'Sequel II'
                     filetype = ''
-                    if '.fastq.gz' in extension and 'hifi_reads' in extension:
+                    if re.match(re_patterns['fastq'], filepath) and 'hifi_reads' in extension:
                         filetype = 'fastq'
                     elif '.bam' in extension:
                         filetype = [type for type in re_patterns.keys() if re.match(re_patterns[type], filepath)]
