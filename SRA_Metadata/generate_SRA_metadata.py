@@ -188,7 +188,7 @@ metadata_dict = {
     },    
     'Kinnex': {
         'library':'kinnex',
-        'title':'Iso-Seq FLNC',
+        'title':'Kinnex FLNC',
         'library_strategy':'OTHER',
         'library_source':'OTHER',
         'library_selection':'cDNA_oligo_dT',

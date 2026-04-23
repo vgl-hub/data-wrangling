@@ -3,7 +3,7 @@ import argparse
 import csv
 
 def parse_args():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(usage='Single entry: python SRA_metadata.py -g single -b [BioSample access] -t [ToLID] -s [Species_name]\nBatch entry: python SRA_metadata.py -g single -b [BioSample access] -t [ToLID] -s [Species_name]')
     parser.add_argument(
         '-g', '--genome', action = 'store_true', help = 'Generate genome sequence metadata'
     )
