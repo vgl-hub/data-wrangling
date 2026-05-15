@@ -309,10 +309,20 @@ def get_genome_metadata(species, tolid, biosample_accession):
                     extension = filepath.split('.', 1)[1]
                     metadata_tag = filepath.split('.', 1)[0]
                     instrument_number = metadata_tag.split('_')[0]
+                    date_part = metadata_tag.split("_")[1]
+                    year = int("20" + date_part[:2])
+                    month = int(date_part[2:4])
                     if instrument_number in pacbio_instruments.keys():
                         instrument = pacbio_instruments[instrument_number]
                     else:
                         instrument = 'Sequel II'
+                    if instrument == "Revio":
+                        if (year, month) > (2025, 2):
+                            design_description = "PacBio SPRQ chemistry, PippinHT size selection"
+                        else:
+                            design_description = "PippinHT size selection"
+                    else:
+                        design_description = "SAGE blue pippin"
                     filetype = ''
                     if re.match(re_patterns['fastq'], filepath) and 'hifi_reads' in extension:
                         filetype = 'fastq'
@@ -333,7 +343,7 @@ def get_genome_metadata(species, tolid, biosample_accession):
                                         'library_layout': metadata['library_layout'], 
                                         'platform': metadata['platform'], 
                                         'instrument_model': instrument, 
-                                        'design_description': 'SAGE blue pippin' if instrument == 'Sequel II' else 'PippinHT size selection',
+                                        'design_description': design_description,
                                         'filetype': 'fastq' if filetype == 'fastq' else 'bam',
                                         'filename': f'%s%s' % (subdir, filepath),
                                         'filename2':'',
