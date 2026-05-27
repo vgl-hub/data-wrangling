@@ -222,6 +222,16 @@ re_patterns = {'fastq': re.compile('.*hifi_reads\\..*fastq.gz$'),
 def get_HiC_filepath_pairs(filepaths):
     filepaths
     pairs = []
+    part_basenames = set()
+
+    # Exclude files that have been split into parts
+    for f in filepaths:
+        if 'part' in f:
+            base = f.split('_part')[0] + '.' + f.split('.', 1)[-1]
+            part_basenames.add(base)
+
+    filepaths = [f for f in filepaths if f not in part_basenames]
+    
     while filepaths:
         filename = filepaths[0]
         extension = filename.split('.', 1)[-1]
